@@ -113,7 +113,7 @@ subString :: Int -> Int -> String -> String
 subString start end str =
     if start > 0
     then
-        let 
+        let
 
             s = start -1
             e = end - 1
@@ -134,14 +134,7 @@ strSum str =
     in sumStrList l
 
 sumStrList :: [String] -> Int
-sumStrList l =
-    if null l 
-    then 0
-    else    
-        let
-            s = read (head l) :: Int
-        in s + sumStrList(tail l)
-
+sumStrList = foldr ((+) . read) 0
 
 {- | Write a function that takes a number and a list of numbers and
 returns a string, saying how many elements of the list are strictly
@@ -158,35 +151,31 @@ and lower than 6 elements (4, 5, 6, 7, 8 and 9).
 -}
 
 lowerAndGreater :: Int -> [Int] -> String
-lowerAndGreater n list = 
-    let 
+lowerAndGreater n list =
+    let
         cnt = getGreaterLowerCnt n list
-    in show n ++ " is greater than " ++ show (head cnt) ++ " elements and lower than " ++ show (last cnt) ++ " elements"   
+    in show n ++ " is greater than " ++ show (fst cnt) ++ " elements and lower than " ++ show (snd cnt) ++ " elements"
 
-getGreaterLowerCnt :: Int -> [Int] -> [Int]    
+getGreaterLowerCnt :: Int -> [Int] -> (Int, Int)
 getGreaterLowerCnt n list
-    | null list  = [0, 0] 
+    | null list  = (0, 0)
     | headOrDefault list < n =
-        let 
-            cnt = [1, 0]
+        let
+            cnt = (1, 0)
         in  sumCnt cnt (getGreaterLowerCnt n (tail list))
     | headOrDefault list > n =
-        let 
-            cnt = [0, 1]
+        let
+            cnt = (0, 1)
         in  sumCnt cnt (getGreaterLowerCnt n (tail list))
-    | otherwise = 
-        let 
-            cnt = [0, 0]
-        in  sumCnt cnt (getGreaterLowerCnt n (tail list))     
+    | otherwise =
+        let
+            cnt = (0, 0)
+        in  sumCnt cnt (getGreaterLowerCnt n (tail list))
 
-sumCnt :: [Int] -> [Int] -> [Int]
-sumCnt l1 l2 = 
-    let 
-        h = head l1 + head l2
-        l = last l1 + last l2
-    in [h, l]    
+sumCnt :: (Int, Int) -> (Int, Int) -> (Int, Int)
+sumCnt (a, b) (x, y) = (a + x, b + y)
 
 
-headOrDefault :: [Int] -> Int   
-headOrDefault list = 
+headOrDefault :: [Int] -> Int
+headOrDefault list =
     if null list then 0 else head list
