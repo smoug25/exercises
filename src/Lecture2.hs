@@ -62,9 +62,8 @@ lazyProduct = prod 1
   where
     prod :: Int -> [Int] -> Int
     prod acc [] = acc
-    prod acc (x: xs)
-      | x == 0 = 0
-      | otherwise = prod (acc * x) xs
+    prod _ (0 : _) = 0
+    prod acc (x : xs) = prod (acc * x) xs
 
 {- | Implement a function that duplicates every element in the list.
 
