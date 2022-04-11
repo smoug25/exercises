@@ -90,11 +90,9 @@ removeAt _ [] = (Nothing, [])
 removeAt n (x:xs)
   | n < 0 = (Nothing , x:xs)
   | n == 0 = (Just x, xs)
-  | otherwise = mergeResultTuple (Nothing , [x]) (removeAt (n -1) xs)
-
-mergeResultTuple :: (Maybe a, [a]) -> (Maybe a, [a]) -> (Maybe a, [a])
-mergeResultTuple (Nothing, l1) (Just a, l2) = (Just a, l1 ++ l2)
-mergeResultTuple (Nothing, l1) (Nothing, l2) = (Nothing, l1 ++ l2)
+  | otherwise =
+      let (val, rest) = removeAt (n - 1) xs
+      in (val, x : rest)
 
 {- | Write a function that takes a list of lists and returns only
 lists of even lengths.
